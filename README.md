@@ -1,5 +1,4 @@
 # BarilePatrunoRipoli
-# Nome del gioco
 
 1. [Introduzione](#introduzione)
 2. [Descrizione del progetto](#descrizione-del-progetto)
