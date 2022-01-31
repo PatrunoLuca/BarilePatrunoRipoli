@@ -12,19 +12,19 @@ class Bullet(Sprite):
         super().__init__()
         # Salvo i parametri di init
         self.surface = image
-        self.posx = posx
-        self.posy = posy
+        self.posx = posx - (image.get_width()/2) if not rotate else posx - (image.get_width()/2) -10
+        #self.posy = posy
         self.rotate = rotate
         self.destroy_at_collision = destroy_at_collision
         
         # Creo un oggetto retta che rappresenta il moto
         # del proiettile nel piano e trovo la lista di punti
         # che giace nel piano
-        self.retta = Retta(posx, 0, 0)
+        self.retta = Retta(self.posx, 0, 0)
         self.punti = self.retta.coppie(posy, 850,  +1)
         
         self.image = image
-        self.rect = self.image.get_rect(center=self.punti[0])
+        self.rect = self.image.get_rect(center=(posx, posy))
         # Setto tutte le variabili di base del proiettile
         self.counter = 0
         self.angle = 0

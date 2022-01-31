@@ -13,7 +13,7 @@ MAX_KUNAI_COOLDOWN = 30
 MAX_INVULNERABILITY_COOLDOWN = 60
 MAX_ENEMY_SPAWN_COOLDOWN = 30
 MAX_INCREASE_SPEED_COOLDOWN = 300
-BULLETS_SPRITES = import_bullets("images/bullets/",48,48)
+BULLETS_SPRITES = import_bullets("images/bullets/",64,64)
 BULLET_SPEED = 10
 ENEMY_HIT_POINTS = 100
 KUNAI_POINTS = 10
@@ -72,6 +72,8 @@ class Game:
 
     def check_bullets(self):
         for bullet in self.bullet_group:
+            typo = "shuriken" if bullet.rotate else "kunai"
+            print(f"Bullet: {typo}\tSize: {bullet.image.get_size()}")
             if bullet.rect.y > 830:
                 self.bullet_group.remove(bullet)
 
@@ -101,19 +103,19 @@ class Game:
         # scegliendo il tipo di animazione durante la camminata
         keys = pygame.key.get_pressed()
         if (keys[pygame.K_UP] or keys[pygame.K_w]) and self.player.rect.top > 0:
-            self.player.new_animation = "up-run"
+            self.player.new_animation = "down-run"
             self.player.vector.x = 0
             self.player.vector.y = -1
         elif (keys[pygame.K_DOWN] or keys[pygame.K_s]) and self.player.rect.bottom < 600:
-            self.player.new_animation = "up-run"
+            self.player.new_animation = "down-run"
             self.player.vector.x = 0
             self.player.vector.y = 1
         elif (keys[pygame.K_LEFT] or keys[pygame.K_a]) and self.player.rect.left > -19:
-            self.player.new_animation = "up-run"
+            self.player.new_animation = "down-run"
             self.player.vector.x = -1
             self.player.vector.y = 0
         elif (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and self.player.rect.right < 819:
-            self.player.new_animation = "up-run"
+            self.player.new_animation = "down-run"
             self.player.vector.x = 1
             self.player.vector.y = 0
         else:
@@ -138,8 +140,8 @@ class Game:
         if (keys[pygame.K_z] or keys[pygame.K_k]) and self.shuriken_cooldown == 0:
             shuriken = Bullet(
                 BULLETS_SPRITES['shuriken'],
-                self.player.rect.x  + 35, 
-                self.player.rect.y + 45,
+                self.player.rect.center[0], 
+                self.player.rect.center[1],
                 True,
                 False)
             self.shuriken_cooldown = MAX_SHURIKEN_COOLDOWN
@@ -148,10 +150,10 @@ class Game:
             self.game_points['shuriken_shooted'] += 1
         elif (keys[pygame.K_x] or keys[pygame.K_l]) and self.kunai_cooldown == 0:
             kunai = Bullet(
-                BULLETS_SPRITES["shuriken2"],
-                self.player.rect.x  + 35, 
-                self.player.rect.y + 45,
-                True,
+                BULLETS_SPRITES["kunai"],
+                self.player.rect.center[0], 
+                self.player.rect.center[1],
+                False,
                 False)
             self.kunai_cooldown = MAX_KUNAI_COOLDOWN
             self.bullet_group.add(kunai)
@@ -233,9 +235,8 @@ class Game:
 
 
 if __name__ == "__main__":
-    enemy_spawn = [True, False][1]
+    enemy_spawn = [True, False][0]
     enemy_moving = [True, False][0]
     debug = [True, False][0]
     game = Game()
     game.main_loop()
-    input()
