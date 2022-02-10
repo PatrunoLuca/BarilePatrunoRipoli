@@ -27,3 +27,18 @@ def import_bullets(path, x, y):
         for i in glob(f"{full_path}/*.png")
         }
     return bullets
+
+def import_enemies(path, x, y):
+    full_path = f"{getcwd()}/{path}".replace("\\", "/")
+    enemies_folders = [folder for folder in  walk(full_path)][0][1]
+    enemies = {}
+    for enemy in enemies_folders:
+        folders = [folder for folder in  walk(full_path)][0][1]
+        enemy_images = {}
+        for folder in folders:
+            image_list = glob(f"{full_path}/{folder}/*.png")
+            enemy_images[folder] = [
+                scale(img_load(image), (x, y)) 
+                for image in image_list
+                ]
+        enemies[enemy] = enemy_images()

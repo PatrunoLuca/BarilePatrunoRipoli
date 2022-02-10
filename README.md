@@ -27,19 +27,20 @@ Nessun problema noto
 ## Feature da aggiungere
 
 - Sprite dei Nemici
-  
-- Gestione del punteggio
-  
-- Schermata di Game Over
-  
+
+- Font Elementi in game
+
+- Logo per i nemici uccisi
+
+- Migliorare schermata di Game Over
+
 - Schermata di introduzione
-  
+
 - Power Up
-  
 
 ## Gestione dei ruoli
 
-| Patruno Luca | Codice e diagramma di flusso |
-| --- | --- |
-| *Ripoli Luca* | *Idea e sprite di gioco* |
-| *Barile Luigi* | *README.md* |
+| Patruno Luca   | Codice e diagramma di flusso |
+| -------------- | ---------------------------- |
+| *Ripoli Luca*  | *Idea e sprite di gioco*     |
+| *Barile Luigi* | *README.md*                  |

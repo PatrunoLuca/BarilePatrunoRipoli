@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.0 --> 10/02/22
+
+### Quali sono le novità?
+- Aggiunto punteggio
+- Aggiunto contatore vite
+- Aggiunto contatore nemici passati
+- Aggiunto Game Over
+- Separate funzioni main_loop e game_loop
+### Quali sono le novitò?
+- Aggiunto contatore punteggio
+- Aggiunto contatore vite
+- Aggiunto contatore nemici passati
+- Modificato sfondo del gioco
+
 ## 0.1.1 --> 31/01/22
 
 ### Quali sono le novità?
