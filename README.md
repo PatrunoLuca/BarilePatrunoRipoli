@@ -1,11 +1,12 @@
 # BarilePatrunoRipoli
 
 1. [Introduzione](#introduzione)
-2. [Descrizione del progetto](#descrizione-del-progetto)
-3. [Requisiti](#requisiti)
-4. [Problemi Noti](#problemi-noti)
-5. [Feature da aggiungere](#feature-da-aggiungere)
-6. [Gestione dei ruoli](#gestione-dei-ruoli)
+2. [Come Giocare](#come-giocare)
+3. [Descrizione del progetto](#descrizione-del-progetto)
+4. [Requisiti](#requisiti)
+5. [Problemi Noti](#problemi-noti)
+6. [Feature da aggiungere](#feature-da-aggiungere)
+7. [Gestione dei ruoli](#gestione-dei-ruoli)
 
 ## Introduzione
 
