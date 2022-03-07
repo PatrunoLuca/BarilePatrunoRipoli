@@ -2,7 +2,7 @@
 
 ## 0.3.0 --> 03/07/22
 
-## Quali sono le nnovità?
+### Quali sono le novità?
 - Scalato gioco di dimensione
 - Possibiltà di mettere il fullscreen
 - I kunai adesso si muovono lateralmente
