@@ -20,10 +20,9 @@ def import_animations(path, x, y):
     return animations
 
 def import_bullets(path, x, y):
-    
     full_path = f"{getcwd()}/{path}".replace("\\", "/")
     bullets = {
-        i.replace("\\", "/").split("/")[-1].split(".png")[0] : scale(img_load(i), (x,y) if "shuriken" in i else (x/2, y))
+        i.replace("\\", "/").split("/")[-1].split(".png")[0] : scale(img_load(i), (x,y) if "shuriken" in i else (x//2, y))
         for i in glob(f"{full_path}/*.png")
         }
     return bullets
@@ -42,3 +41,11 @@ def import_enemies(path, x, y):
                 for image in image_list
                 ]
         enemies[enemy] = enemy_images()
+
+def import_buttons(path):
+    full_path = f"{getcwd()}/{path}".replace("\\", "/")
+    bullets = {
+        i.replace("\\", "/").split("/")[-1].split(".png")[0] : img_load(i)
+        for i in glob(f"{full_path}/*.png")
+        }
+    return bullets

@@ -1,4 +1,4 @@
-from Classes.conica import Conica
+from .conica import Conica
 import pygame
 
 class Retta(Conica):
@@ -14,10 +14,14 @@ class Retta(Conica):
         
         if (self.__a, self.__b) == (0.0, 0.0):
             raise Exception(f"{self.eq_implicita()} non è una retta")
-        if b == 0.0:
+        elif self.__b == 0.0:
             self.__asse_di_simmetria = "x"
             self.__m = 0.0
-            self.__q = 0.0
+            self.__q = self.__c
+        elif self.__a == 0.0:
+            self.__asse_di_simmetria = "y"
+            self.__m = 0.0
+            self.__q = self.__c
         else:
             self.__asse_di_simmetria = "y"
             self.__m = - self.__a / self.__b

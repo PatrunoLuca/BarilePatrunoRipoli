@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0 --> 03/07/22
+
+## Quali sono le nnovità?
+- Scalato gioco di dimensione
+- Possibiltà di mettere il fullscreen
+- I kunai adesso si muovono lateralmente
+- Aggiunto il menù di pausa
+- Aggiunti bottoni per passare da un menù all'altro
+- Aggiunto supporto per il mouse
+
 ## 0.2.0 --> 10/02/22
 
 ### Quali sono le novità?

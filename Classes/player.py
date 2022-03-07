@@ -17,8 +17,8 @@ class Player(Sprite):
         self.rect = self.image.get_rect(center= pos)
         
         # Setto tutte le variabili di base del personaggio
-        self.speed = 5
-        self.animation_speed = 0.3
+        self.speed = 2.5
+        self.animation_speed = 0.15
         self.counter = 0
         self.old_animation = "idle"
 
