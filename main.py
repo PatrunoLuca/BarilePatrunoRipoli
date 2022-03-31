@@ -5,8 +5,10 @@ pygame.font.init()
 
 from Classes.bullet import Bullet
 from Classes.player import Player
-from Classes.utils import import_bullets, import_buttons
+from Classes.utils import import_bullets
 from Classes.mouse_pad import MousePad
+from Classes.enemy import Enemy
+from Classes.button import Button
 
 SCREEN_SIZE = [(800, 450), (1152, 648), (1280, 720), (1536, 864)][2]#(800, 600)
 SCREEN_CENTER = (SCREEN_SIZE[0]//2, SCREEN_SIZE[1]//2)
@@ -29,31 +31,16 @@ ENEMY_COUNTER.fill('blue')
 GAME_OVER_IMAGE = pygame.image.load(f'{GAME_FOLDER}/images/game-over.png')
 GAME_OVER_FONT = pygame.font.Font("EightBitDragon-anqx.ttf", 100)
 ENEMY_IMAGE = [pygame.transform.scale(pygame.image.load(f'{GAME_FOLDER}/images/enemies/{enemy}.png'), (SCREEN_SIZE[0]//10, SCREEN_SIZE[0]//10)) for enemy in ["green_snake", "purple_snake"]]
-BUTTON_IMAGE = import_buttons("/images/buttons/")
 
-class Button(pygame.sprite.Sprite):
-    def __init__(self, button_name: str, phase: str, posy: int, dimension: tuple):
-       pygame.sprite.Sprite.__init__(self)
-       self.image = pygame.transform.scale(BUTTON_IMAGE[button_name], dimension)
-       self.rect = self.image.get_rect()
-       self.rect.center = (SCREEN_SIZE[0]//2, posy)
-       self.phase = phase
-
-class Enemy(pygame.sprite.Sprite):
-    def __init__(self, sprite: pygame.Surface, pos: tuple, speed: int):
-        super().__init__()
-        self.image = sprite
-        self.rect = self.image.get_rect(center= pos)
-        self.speed = speed
-        self.animation_speed = 0.3
-        self.counter = 0
-    
-    def update(self):
-        if enemy_moving:
-            self.rect.y -= self.speed
-
-    def is_collided_with(self, sprite):
-        return self.rect.colliderect(sprite.rect)
+def shake():
+    for _ in range(0, 30):
+        for x in range(0, 20, 5):
+            yield (x*s, 0)
+        for x in range(20, 0, 5):
+            yield (x*s, 0)
+        s *= -1
+    while True:
+        yield (0, 0)
 
 class Game:
     def __init__(self):
@@ -76,9 +63,10 @@ class Game:
         self.enemy_spawn_cooldown = 20
         self.increase_speed_cooldwn = MAX_INCREASE_SPEED_COOLDOWN
         self.life = 3
-        self.phase = "game"
+        self.phase = "main_menu"
         self.enemy_speed = 0.5
         self.enemy_passed = 0
+        self.time_damaged = 0
         self.game_points = {
             "score" : 0,
             "enemy_killed" : 0,
@@ -107,6 +95,7 @@ class Game:
                 self.enemy_group.remove(enemy)
             if enemy.is_collided_with(self.player) and self.invulnerability_cooldown == 0:
                 self.life -=1
+                self.time_damaged = 5
                 self.invulnerability_cooldown = MAX_INVULNERABILITY_COOLDOWN
     
     def get_game_input(self):
@@ -189,11 +178,28 @@ class Game:
             for y in range(0, SCREEN_SIZE[1] + 1, 40):
                 self.screen.blit(BRICK, (x, y))
 
+    def main_menu(self):
+        self.button_group.empty()
+        self.screen.blit(GAME_OVER_IMAGE, (0, 0))
+        self.button_group.add(Button("start-1", "game", 200, (1080//2, 458//2)))
+        self.button_group.add(Button("quit-1", "quit", 500, (1080//2, 458//2)))
+        self.button_group.draw(self.screen)
+        
+        if self.mouse.left_pressed:
+            self.phase = self.mouse.is_colliding_with_group(self.button_group)
+        
+        if self.phase in ["game", "main_menu", "quit"]:
+            pass
+        else:
+            self.phase = "pause"
+
     def game_over(self):
+        self.button_group.empty()
         self.screen.blit(GAME_OVER_IMAGE, (0, 0))
         score = self.game_points['score']
         
-        self.button_group.add(Button("restart-1", "game", 350, (1080//2, 458//2)))
+        self.button_group.add(Button("restart-1", "game", 300, (1080//2, 458//2)))
+        self.button_group.add(Button("quit-1", "quit", 550, (1080//2, 458//2)))
         self.button_group.draw(self.screen)
             
         text = GAME_OVER_FONT.render(f'Score: {score}', 1, (0,0,0))
@@ -203,20 +209,28 @@ class Game:
         if self.mouse.left_pressed:
             self.phase = self.mouse.is_colliding_with_group(self.button_group)
         
-        if self.phase in ["game", "main_menu"]:
+        if self.phase in ["game", "main_menu", "quit"]:
             self.reset_game()
         else:
             self.phase = "game_over"
     
     def pause_game(self):
+        self.button_group.empty()
         self.screen.blit(GAME_OVER_IMAGE, (0, 0))
+        
+        score = self.game_points['score']
+        text = GAME_OVER_FONT.render(f'Score: {score}', 1, (0,0,0))
+        pos = text.get_rect(center=(SCREEN_SIZE[0]//2,  100))
+        self.screen.blit(text, pos)
+        
         self.button_group.add(Button("start-1", "game", 300, (1080//2, 458//2)))
+        self.button_group.add(Button("quit-1", "quit", 550, (1080//2, 458//2)))
         self.button_group.draw(self.screen)
         
         if self.mouse.left_pressed:
             self.phase = self.mouse.is_colliding_with_group(self.button_group)
         
-        if self.phase in ["game", "main_menu"]:
+        if self.phase in ["game", "main_menu", "quit"]:
             pass
         else:
             self.phase = "pause"
@@ -230,6 +244,7 @@ class Game:
         self.life = 3
         self.enemy_speed = 1
         self.enemy_passed = 0
+        self.time_damaged = 0
         self.player = Player(SCREEN_CENTER)
         self.game_points = {
             "score" : 0,
@@ -289,7 +304,11 @@ class Game:
         self.screen.blit(text, (SCREEN_SIZE[0]-SCREEN_SIZE[0]//7, SCREEN_SIZE[1]/50))
              
         #Disegno il personaggio, i proiettili e i nemici
-        self.screen.blit(self.player.image, (self.player.rect.x, self.player.rect.y))
+        if self.time_damaged == 0:
+            self.screen.blit(self.player.image, (self.player.rect.x, self.player.rect.y))
+        else:
+            self.time_damaged -= 1
+
         self.bullet_group.draw(self.screen)
         self.enemy_group.draw(self.screen)
 
@@ -308,9 +327,6 @@ class Game:
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_q:
                         self.run = False
-                    if event.key == pygame.K_r and self.phase == "game_over":
-                        self.phase = "game"
-                        self.reset_game()
                     if event.key == pygame.K_p:
                         self.phase = "pause" if self.phase == "game" else "game"
         
@@ -321,12 +337,16 @@ class Game:
             self.mouse.update(pygame.mouse.get_pos(), pygame.mouse.get_pressed())
             self.keys = pygame.key.get_pressed()
             self.screen.fill("white")
-            if self.phase == "game":
+            if self.phase == "main_menu":
+                self.main_menu()
+            elif self.phase == "game":
                 self.game_loop()
             elif self.phase == "pause":
                 self.pause_game()
             elif self.phase == "game_over":
                 self.game_over()
+            elif self.phase == "quit":
+                self.run = False
             pygame.display.flip()
             
         pygame.quit()
@@ -339,4 +359,3 @@ if __name__ == "__main__":
     debug = [True, False][0]
     game = Game()
     game.main_loop()
-    print("Banana ")

@@ -1,6 +1,14 @@
 # Changelog
 
-## 0.3.0 --> 03/07/22
+## 0.3.1 --> 31/03/22
+
+## Quali sono le nnovità?
+- Aggiunto il menù iniziale
+- Aggiornati i diagrammi di flusso
+- Aggiornato README.md
+- Spostate le classi "Enemy" e "Button" ognuna in un proprio file
+
+## 0.3.0 --> 07/03/22
 
 ## Quali sono le nnovità?
 - Scalato gioco di dimensione
